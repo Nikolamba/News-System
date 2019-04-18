@@ -7,4 +7,5 @@ import java.util.List;
 public interface AuthorService {
     List<Author> findAll();
     Author findByName(String name);
+    Author save(Author author);
 }

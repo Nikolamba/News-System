@@ -3,10 +3,7 @@ package ru.job4j.news.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.job4j.news.models.Author;
 import ru.job4j.news.models.News;
 import ru.job4j.news.services.AuthorService;
@@ -38,39 +35,28 @@ public class NewsController {
         return "news";
     }
 
+    @GetMapping("/{num}")
+    public String showMoreInfoAboutNews() {
+        return "news_info";
+    }
+
     @GetMapping("/index")
     public String showFirstNewsPage(Model model) {
         return "redirect:/index/1";
     }
 
-    @GetMapping("/addnews")
-    public String showAddNewsPage(Model model) {
-        model.addAttribute("authors", authorService.findAll());
-        model.addAttribute("news", new News());
-        return "addnews.jsp";
-    }
-
     @PostMapping("/addnews")
-    public String addNews(@ModelAttribute News news) {
-        Author author = authorService.findByName(news.getAuthor().getName());
-        news.setAuthor(author);
+    public String addNews(@ModelAttribute News news, @RequestParam String author) {
+        Author newsAuthor = authorService.findByName(author);
+        newsAuthor = (newsAuthor == null) ? authorService.save(new Author(author)) : newsAuthor;
+        news.setAuthor(newsAuthor);
         news.setComments(new ArrayList<>());
-        news.setDate(new Date(System.currentTimeMillis()));
         newsService.save(news);
-        return "redirect:/news.do";
+        return "redirect:/index";
     }
 
-    @GetMapping("/editnews.do/{newsId}")
-    public String editNews(@PathVariable Integer newsId, Model model) {
-        model.addAttribute("news", newsService.findById(newsId));
-        return "editnews.jsp";
-    }
-
-    @PostMapping("/editnews")
-    public String editNewsPost(@ModelAttribute News news) {
-        News news1 = newsService.findById(news.getId());
-        news1.setText(news.getText());
-        newsService.save(news1);
-        return "redirect:news.do";
+    @GetMapping("/more/{num}")
+    public String showNewsWithComments() {
+        return "news_with_comments";
     }
 }

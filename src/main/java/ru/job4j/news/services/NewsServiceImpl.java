@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.job4j.news.models.Comment;
 import ru.job4j.news.models.News;
 import ru.job4j.news.repositories.NewsRepository;
 
@@ -47,5 +48,13 @@ public class NewsServiceImpl implements NewsService {
         Pageable page = PageRequest.of(0, Integer.MAX_VALUE);
         Page<News> newsPage = newsRepository.findAll(page);
         return newsPage.getTotalElements();
+    }
+
+    @Override
+    @Transactional
+    public void addComment(Comment comment, Integer newsId) {
+        News news = newsRepository.findById(newsId).get();
+        news.addComment(comment);
+        newsRepository.save(news);
     }
 }

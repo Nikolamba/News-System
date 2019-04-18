@@ -24,4 +24,10 @@ public class AuthorServiceImpl implements AuthorService {
     public Author findByName(String name) {
         return authorRepository.findByName(name);
     }
+
+    @Override
+    @Transactional
+    public Author save(Author author) {
+        return authorRepository.save(author);
+    }
 }

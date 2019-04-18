@@ -7,11 +7,16 @@
     <#list news  as cur_news>
         <div class="news" style="border: darkgray">
             <div class="title">
-                ${cur_news.title}
+                <input type="text" value="${cur_news.title}">
             </div>
 
             <div class="content">
-                ${cur_news.text}
+                <textarea cols="100" rows="5">${cur_news.text}</textarea>
+            </div>
+
+            <div class="more_reference">
+                <a href="/news/${cur_news.id}">edit</a>
+                <a href="/news/more/${cur_news.id}">more</a>
             </div>
             <br>
         </div>
@@ -20,9 +25,9 @@
     <div class="pagination">
         <#list pageCount as pageNum>
             <#if currentPage == pageNum>
-                [<a href="/news/index/${pageNum}">${pageNum}</a>]
+                [<a href="${pageNum}">${pageNum}</a>]
             <#else>
-            <a href="/news/index/${pageNum}">${pageNum}</a>
+            <a href="${pageNum}">${pageNum}</a>
             </#if>
         </#list>
     </div>

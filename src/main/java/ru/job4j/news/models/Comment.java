@@ -1,5 +1,7 @@
 package ru.job4j.news.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -15,6 +17,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "news_id")
+    @JsonIgnoreProperties("comments")
     private News forNews;
 
     @Column(name = "text")
@@ -24,6 +27,11 @@ public class Comment {
     private Date date;
 
     public Comment() {
+    }
+
+    public Comment(String text) {
+        this.text = text;
+        this.date = new Date(System.currentTimeMillis());
     }
 
     public void setId(int id) {

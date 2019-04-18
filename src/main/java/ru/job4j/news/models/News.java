@@ -25,7 +25,7 @@ public class News {
     @Column(name = "text")
     private String text;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "forNews")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "forNews")
     private List<Comment> comments;
 
     @Column(name = "date")
@@ -79,6 +79,10 @@ public class News {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 
     @Override
